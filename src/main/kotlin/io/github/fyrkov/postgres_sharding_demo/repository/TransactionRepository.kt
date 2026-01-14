@@ -2,8 +2,6 @@ package io.github.fyrkov.postgres_sharding_demo.repository
 
 import io.github.fyrkov.postgres_sharding_demo.domain.Transaction
 import io.github.fyrkov.postgres_sharding_demo.domain.TransactionId
-import org.jooq.DSLContext
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Repository
 import java.math.BigDecimal
 import java.time.Instant
@@ -14,7 +12,7 @@ class TransactionRepository(
     private val shardsRouter: ShardsRouter,
 ) {
     fun insert(tx: Transaction): Transaction {
-        shardsRouter.getShard(tx.id.accountId).execute(
+        shardsRouter.dslFor(tx.id.accountId).execute(
             """
       insert into transactions(account_id, tx_id, tx_type, amount)
       values (?, ?, ?, ?)
@@ -28,7 +26,7 @@ class TransactionRepository(
     }
 
     fun findAllByAccountId(accountId: UUID): List<Transaction> =
-        shardsRouter.getShard(accountId)
+        shardsRouter.dslFor(accountId)
             .fetch(
                 """
         select account_id, tx_id, tx_type, amount, created_at
@@ -53,7 +51,7 @@ class TransactionRepository(
     fun findById(id: TransactionId): Transaction? = findById(id.accountId, id.txId)
 
     fun findById(accountId: UUID, txId: UUID): Transaction? =
-        shardsRouter.getShard(accountId)
+        shardsRouter.dslFor(accountId)
             .fetchOne(
                 """
                 select account_id, tx_id, tx_type, amount, created_at

@@ -7,7 +7,7 @@ import org.testcontainers.postgresql.PostgreSQLContainer
 import org.testcontainers.utility.DockerImageName
 
 @SpringBootTest
-abstract class AbstractIT {
+abstract class AbstractIntegrationTest {
 
     companion object {
         private val image = DockerImageName.parse("postgres:17")

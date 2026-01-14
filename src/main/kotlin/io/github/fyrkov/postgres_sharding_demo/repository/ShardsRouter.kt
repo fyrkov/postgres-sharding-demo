@@ -10,7 +10,7 @@ class ShardsRouter(
     @Qualifier("dslShard1") private val dsl1: DSLContext,
     @Qualifier("dslShard2") private val dsl2: DSLContext,
 ) {
-    fun getShard(accountId: UUID): DSLContext =
+    fun dslFor(accountId: UUID): DSLContext =
         if (accountId.hashCode() % 2 == 0) {
             dsl1.also { println("Routing to shard 1 for account $accountId") }
         } else {

@@ -1,6 +1,6 @@
 package io.github.fyrkov.postgres_sharding_demo.repository
 
-import io.github.fyrkov.postgres_sharding_demo.AbstractIT
+import io.github.fyrkov.postgres_sharding_demo.AbstractIntegrationTest
 import io.github.fyrkov.postgres_sharding_demo.domain.Account
 import io.github.fyrkov.postgres_sharding_demo.domain.Transaction
 import io.github.fyrkov.postgres_sharding_demo.domain.TransactionId
@@ -13,10 +13,10 @@ import java.math.BigDecimal
 import java.util.*
 
 @SpringBootTest
-class TransactionRepositoryIT(
+class TransactionRepositoryIntegrationTest(
     @Autowired var transactionRepository: TransactionRepository,
     @Autowired var accountRepository: AccountRepository,
-) : AbstractIT() {
+) : AbstractIntegrationTest() {
 
     @Test
     fun `should store transactions for same account`() {

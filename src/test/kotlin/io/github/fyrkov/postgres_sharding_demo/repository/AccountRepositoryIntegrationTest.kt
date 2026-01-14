@@ -1,15 +1,15 @@
 package io.github.fyrkov.postgres_sharding_demo.repository
 
-import io.github.fyrkov.postgres_sharding_demo.AbstractIT
+import io.github.fyrkov.postgres_sharding_demo.AbstractIntegrationTest
 import io.github.fyrkov.postgres_sharding_demo.domain.Account
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNotNull
 import org.springframework.beans.factory.annotation.Autowired
 import java.util.*
 
-class AccountRepositoryIT(
+class AccountRepositoryIntegrationTest(
     @Autowired var accountRepository: AccountRepository,
-) : AbstractIT() {
+) : AbstractIntegrationTest() {
 
     @Test
     fun `should store account`() {
