@@ -4,22 +4,18 @@ import io.github.fyrkov.postgres_sharding_demo.AbstractIT
 import io.github.fyrkov.postgres_sharding_demo.domain.Account
 import io.github.fyrkov.postgres_sharding_demo.domain.Transaction
 import io.github.fyrkov.postgres_sharding_demo.domain.TransactionId
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.Import
 import java.math.BigDecimal
 import java.util.*
 
 @SpringBootTest
-class TransactionRepositoryIT : AbstractIT() {
-
-    @Autowired
-    lateinit var transactionRepository: TransactionRepository
-
-    @Autowired
-    lateinit var accountRepository: AccountRepository
+class TransactionRepositoryIT(
+    @Autowired var transactionRepository: TransactionRepository,
+    @Autowired var accountRepository: AccountRepository,
+) : AbstractIT() {
 
     @Test
     fun `should store transactions`() {
