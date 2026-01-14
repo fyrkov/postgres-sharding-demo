@@ -47,7 +47,7 @@ class DBConfig {
                 .dataSource(ds)
                 .baselineOnMigrate(true)
                 .load()
-                .migrate()
+                .migrate().also { println("Flyway migration finished for $ds") }
         }
     }
 }
