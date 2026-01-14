@@ -50,4 +50,29 @@ class TransactionRepository(
                 )
             }
 
+    fun findById(id: TransactionId): Transaction? = findById(id.accountId, id.txId)
+
+    fun findById(accountId: UUID, txId: UUID): Transaction? =
+        shardsRouter.getShard(accountId)
+            .fetchOne(
+                """
+                select account_id, tx_id, tx_type, amount, created_at
+                from transactions
+                where account_id = ? and tx_id = ?
+                """.trimIndent(),
+                accountId,
+                txId
+            )
+            ?.let { r ->
+                Transaction(
+                    id = TransactionId(
+                        accountId = r.get("account_id", UUID::class.java),
+                        txId = r.get("tx_id", UUID::class.java),
+                    ),
+                    txType = r.get("tx_type", String::class.java),
+                    amount = r.get("amount", BigDecimal::class.java),
+                    createdAt = r.get("created_at", Instant::class.java),
+                )
+            }
+
 }
