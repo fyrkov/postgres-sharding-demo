@@ -12,8 +12,4 @@ class ShardsRouter(
 ) {
     fun getShard(accountId: UUID): DSLContext =
         if (accountId.hashCode() % 2 == 0) dsl1 else dsl2
-
-    fun withShard(accountId: UUID, block: (DSLContext) -> Unit) {
-        if (accountId.hashCode() % 2 == 0) block(dsl1) else block(dsl2)
-    }
 }
