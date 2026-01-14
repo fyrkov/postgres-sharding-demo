@@ -8,9 +8,7 @@ import org.springframework.boot.runApplication
 
 @SpringBootApplication(
 	exclude = [
-		JooqAutoConfiguration::class,
-		FlywayAutoConfiguration::class,
-		DataSourceAutoConfiguration::class,
+		JooqAutoConfiguration::class // because default Jooq autoconfig assumes a single datasource
 	]
 )
 class PostgresShardingDemoApplication
