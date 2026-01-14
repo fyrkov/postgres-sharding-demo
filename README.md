@@ -67,6 +67,10 @@ Cons:
 
 ## How to run locally
 
+### Dependencies
+* JDK >= 21
+* Docker
+
 Start DBs:
 ```bash
 docker compose up -d
