@@ -48,6 +48,27 @@ class TransactionRepository(
                 )
             }
 
+    fun findAll(): List<Transaction> =
+        shardsRouter.allShards().flatMap { dsl ->
+            dsl.fetch(
+                """
+                select account_id, tx_id, tx_type, amount, created_at
+                from transactions
+                order by created_at desc, tx_id
+                """.trimIndent()
+            ).map { r ->
+                Transaction(
+                    id = TransactionId(
+                        accountId = r.get("account_id", UUID::class.java),
+                        txId = r.get("tx_id", UUID::class.java),
+                    ),
+                    txType = r.get("tx_type", String::class.java),
+                    amount = r.get("amount", BigDecimal::class.java),
+                    createdAt = r.get("created_at", Instant::class.java),
+                )
+            }
+        }.sortedByDescending { it.createdAt }
+
     fun findById(id: TransactionId): Transaction? = findById(id.accountId, id.txId)
 
     fun findById(accountId: UUID, txId: UUID): Transaction? =
