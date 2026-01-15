@@ -19,6 +19,8 @@ Start the app:
 ./gradlew bootRun
 ```
 
+Access the app at http://localhost:8080/
+
 ## What this POC demonstrates
 
 - 2 independent PostgreSQL databases (“shards”)
