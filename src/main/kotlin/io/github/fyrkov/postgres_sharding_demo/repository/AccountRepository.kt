@@ -10,7 +10,7 @@ class AccountRepository(
     private val shardsRouter: ShardsRouter,
 ) {
     fun save(account: Account): Account {
-        shardsRouter.dslFor(account.accountId).execute(
+        shardsRouter.shardFor(account.accountId).execute(
             "insert into accounts(account_id) values (?)",
             account.accountId
         )
@@ -18,9 +18,9 @@ class AccountRepository(
     }
 
     fun findById(accountId: UUID): Account? =
-        shardsRouter.dslFor(accountId)
+        shardsRouter.shardFor(accountId)
             .fetchOne(
-                "select account_id, created_at from accounts where account_id = ?",
+                "select * from accounts where account_id = ?",
                 accountId
             )
             ?.let { r ->
@@ -29,4 +29,15 @@ class AccountRepository(
                     createdAt = r.get("created_at", Instant::class.java),
                 )
             }
+
+    fun findAll(): List<Account> =
+        shardsRouter.allShards().flatMap { dsl ->
+            dsl.fetch("select * from accounts")
+                .map { r ->
+                    Account(
+                        accountId = r.get("account_id", UUID::class.java),
+                        createdAt = r.get("created_at", Instant::class.java),
+                    )
+                }
+        }
 }

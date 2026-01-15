@@ -12,7 +12,7 @@ class TransactionRepository(
     private val shardsRouter: ShardsRouter,
 ) {
     fun insert(tx: Transaction): Transaction {
-        shardsRouter.dslFor(tx.id.accountId).execute(
+        shardsRouter.shardFor(tx.id.accountId).execute(
             """
       insert into transactions(account_id, tx_id, tx_type, amount)
       values (?, ?, ?, ?)
@@ -26,7 +26,7 @@ class TransactionRepository(
     }
 
     fun findAllByAccountId(accountId: UUID): List<Transaction> =
-        shardsRouter.dslFor(accountId)
+        shardsRouter.shardFor(accountId)
             .fetch(
                 """
         select account_id, tx_id, tx_type, amount, created_at
@@ -51,7 +51,7 @@ class TransactionRepository(
     fun findById(id: TransactionId): Transaction? = findById(id.accountId, id.txId)
 
     fun findById(accountId: UUID, txId: UUID): Transaction? =
-        shardsRouter.dslFor(accountId)
+        shardsRouter.shardFor(accountId)
             .fetchOne(
                 """
                 select account_id, tx_id, tx_type, amount, created_at
