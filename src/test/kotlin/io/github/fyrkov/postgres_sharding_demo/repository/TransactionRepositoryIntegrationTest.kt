@@ -22,7 +22,7 @@ class TransactionRepositoryIntegrationTest(
     fun `should store transactions for same account`() {
         // Given
         val accountId = UUID.randomUUID()
-        accountRepository.save(Account(accountId))
+        accountRepository.save(Account(accountId, "John", "Doe", BigDecimal.ZERO))
 
         val tx1 = Transaction(
             id = TransactionId(accountId, UUID.randomUUID()),
@@ -50,11 +50,11 @@ class TransactionRepositoryIntegrationTest(
         // Given
         val accountId1: UUID = generateSequence { UUID.randomUUID() }
             .first { it.hashCode() % 2 == 0 }
-        accountRepository.save(Account(accountId1))
+        accountRepository.save(Account(accountId1, "Acc1", "Test", BigDecimal.ZERO))
 
         val accountId2: UUID = generateSequence { UUID.randomUUID() }
             .first { it.hashCode() % 2 == 1 }
-        accountRepository.save(Account(accountId2))
+        accountRepository.save(Account(accountId2, "Acc2", "Test", BigDecimal.ZERO))
 
 
         val tx1 = Transaction(

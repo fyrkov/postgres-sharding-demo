@@ -16,7 +16,7 @@ class TransactionControllerIntegrationTest(
     @Test
     fun `should create and list transactions`() {
         // Given
-        val account = accountController.createAccount()
+        val account = accountController.createAccount(AccountRequest("John", "Doe", BigDecimal.ZERO))
         val accountId = account.accountId
         val request = TransactionRequest(
             accountId = accountId,

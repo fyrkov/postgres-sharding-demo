@@ -2,10 +2,10 @@ package io.github.fyrkov.postgres_sharding_demo.controller
 
 import io.github.fyrkov.postgres_sharding_demo.AbstractIntegrationTest
 import io.github.fyrkov.postgres_sharding_demo.repository.AccountRepository
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import java.math.BigDecimal
 
 class AccountControllerIntegrationTest(
     @Autowired val accountController: AccountController,
@@ -14,16 +14,21 @@ class AccountControllerIntegrationTest(
 
     @Test
     fun `should create account`() {
-        val result = accountController.createAccount()
+        val request = AccountRequest("John", "Doe", BigDecimal("100.00"))
+        val result = accountController.createAccount(request)
 
         assertNotNull(result.accountId)
+        assertEquals("John", result.firstName)
+        assertEquals("Doe", result.lastName)
+        assertEquals(0, BigDecimal("100.00").compareTo(result.balance))
         assertNotNull(accountRepository.findById(result.accountId))
     }
 
     @Test
     fun `should list accounts`() {
         // Given
-        val account = accountController.createAccount()
+        val request = AccountRequest("Jane", "Doe", BigDecimal("50.00"))
+        val account = accountController.createAccount(request)
 
         // When
         val accounts = accountController.listAccounts()

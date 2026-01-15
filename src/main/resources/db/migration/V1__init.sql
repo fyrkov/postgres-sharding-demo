@@ -1,5 +1,8 @@
 create table if not exists accounts (
     account_id uuid primary key,
+    balance numeric(18, 2) not null default 0,
+    first_name varchar(255) not null,
+    last_name varchar(255) not null,
     created_at timestamptz not null default now()
 );
 
